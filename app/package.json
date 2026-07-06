@@ -1,0 +1,13 @@
+{
+  "name": "enterprise-devops-app",
+  "version": "1.0.0",
+  "description": "Enterprise application workload for the Enterprise DevOps Platform",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "prom-client": "^15.1.3"
+  }
+}
