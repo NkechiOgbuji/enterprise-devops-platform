@@ -8,29 +8,32 @@ on:
       - "app/**"
       - ".github/workflows/build-app.yml"
 
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "app/**"
-
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Build application image
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./app
-          push: false
-          tags: enterprise-devops-app:${{ github.sha }}
+          push: true
+          tags: |
+            477261461487.dkr.ecr.us-east-1.amazonaws.com/enterprise-devops-dev-app:${{ github.sha }}
+            477261461487.dkr.ecr.us-east-1.amazonaws.com/enterprise-devops-dev-app:latest
 
-      - name: Verify Docker build
-        run: echo "Enterprise application image built successfully"
+      - name: Verify image pushed
+        run: echo "Enterprise app image pushed to Amazon ECR successfully"
