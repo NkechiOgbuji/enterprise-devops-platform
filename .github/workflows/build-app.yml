@@ -1,0 +1,36 @@
+name: Build Enterprise App
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "app/**"
+      - ".github/workflows/build-app.yml"
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "app/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build application image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./app
+          push: false
+          tags: enterprise-devops-app:${{ github.sha }}
+
+      - name: Verify Docker build
+        run: echo "Enterprise application image built successfully"
