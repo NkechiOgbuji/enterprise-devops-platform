@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: enterprise-app
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/NkechiOgbuji/enterprise-devops-platform.git
+    targetRevision: main
+    path: helm/enterprise-app
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: enterprise-app
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
