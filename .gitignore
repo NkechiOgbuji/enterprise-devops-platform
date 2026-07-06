@@ -4,3 +4,4 @@
 *.tfvars.backup
 .terraform.lock.hcl
 .DS_Store
+terraform/environments/dev/tfplan
