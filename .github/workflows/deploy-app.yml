@@ -1,0 +1,24 @@
+name: Build and Deploy Enterprise App
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [app-image-built]
+
+jobs:
+  update-helm-values:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout platform repository
+        uses: actions/checkout@v4
+
+      - name: Update Helm image tag
+        run: |
+          echo "This workflow will update Helm values with the latest app image tag."
+
+      - name: Commit updated Helm values
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git status
